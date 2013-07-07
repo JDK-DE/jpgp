@@ -39,7 +39,7 @@ public class PGPService implements IPGPService {
 	public boolean checkStringSignature(String signatureString, String base64Signatory, String data) {
 		try {
 			JCertificate cert = dearmor(base64Signatory);
-			Signature s = new Signature(signatureString, cert.getPubKey());
+			Signature s = new Signature(signatureString, cert.pubKey());
 			return s.verify(data);
 		} catch (Exception e) {
 			throw new RuntimeException(e);

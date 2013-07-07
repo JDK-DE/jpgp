@@ -15,7 +15,7 @@ public class JKey {
 		return new String(Hex.encode(pubKey.getFingerprint()));
 	}
 
-	public PGPPublicKey getPubKey() {
+	public PGPPublicKey pubKey() {
 		return pubKey;
 	}
 

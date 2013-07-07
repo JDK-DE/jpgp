@@ -56,10 +56,10 @@ public class JCertificate extends JKey {
 		PGPSignature s = null;
 		while (s == null && it != null && it.hasNext()) {
 			PGPSignature pgpSignature = (PGPSignature) it.next();
-			if(getFingerprint().endsWith(Long.toHexString(pgpSignature.getKeyID()))){
+			if(cert.getFingerprint().endsWith(Long.toHexString(pgpSignature.getKeyID()))){
 				s = pgpSignature;
 				try {
-					s.initVerify(pubKey, "BC");
+					s.initVerify(cert.pubKey, "BC");
 					verified = s.verifyCertification(uid, pubKey);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
