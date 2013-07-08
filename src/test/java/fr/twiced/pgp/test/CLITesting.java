@@ -69,7 +69,7 @@ public class CLITesting {
 	@Test
 	public void checkCert(){
 		String exp = CMD_CGEEK_CERT_RESPONSE;
-		String actual = new Main().exec(CMD_CGEEK_CERT);
+		String actual = new Main().exec(CMD_CGEEK_CERT).replace("\\r", "");
 		Assert.assertEquals(exp, actual);
 	}
 	
