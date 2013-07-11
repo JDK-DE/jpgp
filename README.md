@@ -12,6 +12,8 @@ Usage
      -I,--signed            Verifies if a UID is signed by the given public
                             key.
                             Requires --pubkey, --cert, --uid options.
+     -n,--nocarriage        Convert <CR><LF> from --data option to <LF>
+                            UNIX-style to avoid signature errors.
      -P,--parse             Parses Base64 certificate and outputs JSON
                             structure of it.
                             Requires --cert option.

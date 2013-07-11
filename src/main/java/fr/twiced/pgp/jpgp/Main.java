@@ -18,6 +18,7 @@ public class Main {
 	private static final String OPT_DATA = "d";
 	private static final String OPT_SIG = "s";
 	private static final String OPT_UID = "u";
+	private static final String OPT_UNIX_CR = "n";
 	private static final String OPT_CMD_PARSE = "P";
 	private static final String OPT_CMD_VERIFY = "V";
 	private static final String OPT_CMD_ISSIGNED = "I";
@@ -36,6 +37,8 @@ public class Main {
 		options.addOption(OPT_SIG, "signature", true, "Signature to verify - ASCII armored.");
 		options.addOption(OPT_DATA, "data", true, "Data the signature is based upon - ASCII armored.");
 		options.addOption(OPT_UID, "uid", true, "UID the signature is based upon - clear text.");
+		options.addOption(OPT_UID, "uid", true, "UID the signature is based upon - clear text.");
+		options.addOption(OPT_UNIX_CR, "nocarriage", false, "Convert <CR><LF> from --data option to <LF> UNIX-style to avoid signature errors.");
 		options.addOption(OPT_CMD_PARSE, "parse", false, "Parses Base64 certificate and outputs JSON structure of it.\nRequires --cert option.");
 		options.addOption(OPT_CMD_VERIFY, "verify", false, "Verifies if a signature matches some data.\nRequires --pubkey, --signature and --data options.");
 		options.addOption(OPT_CMD_ISSIGNED, "signed", false, "Verifies if a UID is signed by the given public key.\nRequires --pubkey, --cert, --uid options.");
@@ -65,7 +68,11 @@ public class Main {
 			if(cmd.hasOption(OPT_CMD_VERIFY)){
 				if(!cmd.hasOption(OPT_PUBK) || !cmd.hasOption(OPT_SIG) || !cmd.hasOption(OPT_DATA))
 					throw new OptionRequiredException(cmd);
-				boolean verified = pgp.checkStringSignature(cmd.getOptionValue(OPT_SIG), cmd.getOptionValue(OPT_PUBK), cmd.getOptionValue(OPT_DATA));
+				String dataToCompare = cmd.getOptionValue(OPT_DATA);
+				if(cmd.hasOption(OPT_UNIX_CR)){
+					dataToCompare = dataToCompare.replace("\r\n", "\n");
+				}
+				boolean verified = pgp.checkStringSignature(cmd.getOptionValue(OPT_SIG), cmd.getOptionValue(OPT_PUBK), dataToCompare);
 				res = new JSONResponse(verified);
 			}
 			
